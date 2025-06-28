@@ -6,7 +6,7 @@ const venueSchema = new Schema({
   city: { type: String, required: true },
   address: String,
   totalSeats: Number,
-  seatLayout: [String], // ['A1', 'A2', 'B1', ...]
+  seatLayout: [String],
 }, { timestamps: true });
 
 const VenueModel = model("Venue", venueSchema);

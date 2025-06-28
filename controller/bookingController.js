@@ -6,7 +6,7 @@ export const getBookingHistory = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // Find all bookings by user and populate show/movie/venue
+    // Find all bookings by user
     const bookings = await Booking.find({ user: userId })
       .populate({
         path: 'showId',
@@ -48,19 +48,19 @@ export const createBooking = async (req, res) => {
       return res.status(400).json({ message: "Invalid showId or seats" });
     }
 
-    // 2. Confirm if Show exists
+    // Confirm if Show exists
     const show = await Show.findById(showId);
     if (!show) {
       return res.status(404).json({ message: "Show not found" });
     }
 
-    // 3. Check if any seats already booked
+    //Check if any seats already booked
     const alreadyBooked = seats.filter(seat => show.seatsBooked.includes(seat));
     if (alreadyBooked.length > 0) {
       return res.status(409).json({ message: `Seats already booked: ${alreadyBooked.join(", ")}` });
     }
 
-    // 4. Validate user holds a valid seat lock
+    //Validate if user holds a valid seat lock
     const validLock = await SeatLock.findOne({
       userId,
       showId,
@@ -72,7 +72,7 @@ export const createBooking = async (req, res) => {
       return res.status(403).json({ message: "You do not hold a valid seat lock for the selected seats" });
     }
 
-    // 5. Book seats atomically (check again to avoid race condition)
+    // Book seats atomically (check again to avoid race condition)
     const updatedShow = await Show.findOneAndUpdate(
       {
         _id: showId,
@@ -88,14 +88,14 @@ export const createBooking = async (req, res) => {
       return res.status(409).json({ message: "Seat booking conflict. Some seats may have just been booked." });
     }
 
-    // 6. Create booking
+    // Create booking
     const booking = await Booking.create({
       userId,
       showId,
       seats
     });
 
-    // 7. Clear the seat lock
+    // Clear the seat lock
     await SeatLock.deleteOne({ _id: validLock._id });
 
     return res.status(201).json({
@@ -110,7 +110,7 @@ export const createBooking = async (req, res) => {
 };
 
 
-// Lock seats temporarily (say, for 5 mins)
+// Lock seats temporarily (for 5 mins)
 export const lockSeats = async (req, res) => {
   try {
     const { showId, seats } = req.body;
@@ -133,7 +133,7 @@ export const lockSeats = async (req, res) => {
     }
 
     // Lock seats for 5 minutes
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
     const seatLock = await SeatLock.create({ userId, showId, seats, expiresAt });
 
     return res.status(200).json({ message: "Seats locked successfully", lock: seatLock });

@@ -6,8 +6,8 @@ const movieSchema = new Schema({
   description: String,
   language: String,
   genre: String,
-  duration: Number, // in minutes
-  city: [String], // cities it's playing in
+  duration: Number, 
+  city: [String],
 }, { timestamps: true });
 
 const MovieModel = model("Movie", movieSchema);

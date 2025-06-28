@@ -9,7 +9,7 @@ export const searchMoviesByCity = async (req, res) => {
       return res.status(400).json({ message: 'City is required' });
     }
 
-    // 1. Find venues in the city
+    // Finding venues in the city
     const venues = await Venue.find({ city });
     const venueIds = venues.map(v => v._id);
 
@@ -17,7 +17,7 @@ export const searchMoviesByCity = async (req, res) => {
       return res.status(404).json({ message: 'No venues found in this city' });
     }
 
-    // 2. Find shows at those venues
+    //Find shows at those venues
     const shows = await Show.find({ venueId: { $in: venueIds } })
       .populate('movieId')   // bring in movie details
       .populate('venueId');  // bring in venue details
@@ -26,7 +26,6 @@ export const searchMoviesByCity = async (req, res) => {
       return res.status(404).json({ message: 'No shows found in this city' });
     }
 
-    // 3. Structure response
     const result = shows.map(show => ({
       showId: show._id,
       movie: {

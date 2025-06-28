@@ -5,7 +5,7 @@ const showSchema = new Schema({
   movieId: { type: mongoose.Schema.Types.ObjectId, ref: 'Movie', required: true },
   venueId: { type: mongoose.Schema.Types.ObjectId, ref: 'Venue', required: true },
   startTime: { type: Date, required: true },
-  seatsAvailable: [String], // ['A1', 'A2', 'B1'...]
+  seatsAvailable: [String],
   seatsBooked: {
     type: [String],
     default: []

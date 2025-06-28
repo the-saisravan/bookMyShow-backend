@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-//register a new user
+
 const register= async (req,res)=>{
     const userDetails = req.body;
     const email = userDetails.email;
@@ -22,12 +22,12 @@ const register= async (req,res)=>{
     const hashedPassword = await bcrypt.hash(password,10);
     userDetails.password = hashedPassword;
     await UserModel.create(userDetails);
-    // return res.status(200).json({message: "user registered successfully"});
+
     return res.status(200).json({message: "user registered successfully", user: userDetails});
 }
 export { register };
 
-//user login
+
 const login =async (req,res)=>{
     const {email, password} = req.body;
     const userExists = await UserModel.findOne({email: email});
