@@ -19,8 +19,8 @@ export const searchMoviesByCity = async (req, res) => {
 
     //Find shows at those venues
     const shows = await Show.find({ venueId: { $in: venueIds } })
-      .populate('movieId')   // bring in movie details
-      .populate('venueId');  // bring in venue details
+      .populate('movieId')   
+      .populate('venueId');  
 
     if (shows.length === 0) {
       return res.status(404).json({ message: 'No shows found in this city' });

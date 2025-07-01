@@ -5,7 +5,7 @@ import authRoutes from './routes/authRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js'
 import adminRoutes from './routes/adminRoutes.js';
 import searchRoutes from './routes/searchRoutes.js';
-import { cleanupExpiredLocks } from './utils/cleanUpLock.js';
+import { cleanUpExpiredLocks } from './utils/cleanUpLock.js';
 
 
 const app = express();
@@ -34,5 +34,5 @@ app.listen(process.env.PORT, () => {
 })
 
 setInterval(() => {
-  cleanupExpiredLocks();
+  cleanUpExpiredLocks();
 }, 60 * 1000); // every 1 minute
