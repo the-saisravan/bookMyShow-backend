@@ -1,11 +1,10 @@
 import express from 'express';
 import authoriseRoles, { userAuthenticate } from '../middleware/auth.js';
-import {createBooking} from '../controller/bookingController.js';
+import {createBooking, lockSeats} from '../controller/bookingController.js';
 
 const router = express.Router();
 
-// router.get('/history', userAuthenticate, getBookingHistory);
-router.post('/', userAuthenticate, createBooking);
-// router.post('/lock', userAuthenticate, lockSeats);
+router.post('/lock', userAuthenticate, lockSeats);
+router.post('/booking', userAuthenticate, createBooking);
 
 export default router;

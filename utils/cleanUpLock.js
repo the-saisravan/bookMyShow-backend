@@ -1,8 +1,13 @@
 import SeatLock from "../models/seatLock.js";
+import cron from 'node-cron';
 
-export const cleanUpExpiredLocks = async(req, res)=>{
+cron.schedule('* * * * *', async()=>{
   const now = new Date();
-  await SeatLock.deleteMany({
-    expiresAt: { $lt: now }
-  });
-}
+  try{
+    await SeatLock.deleteMany({expiresAt: { $lt: now } });
+  }
+  catch(error){
+    console.error("Error cleaning up expired locks:", error);
+  }
+
+});
